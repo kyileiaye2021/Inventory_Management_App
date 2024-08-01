@@ -4,9 +4,9 @@
 //for using hooks like 'useState' and 'useEffect' that don't work during server-side rendering
 'use client' // indicates that this is a client-side component.
 
-import { useState, useEffect } from 'react' //for managing state and side effects 
-import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material'
-import { firestore } from '@/firebase'
+import { useState, useEffect } from 'react'; //for managing state and side effects 
+import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material';
+import { firestore } from '@/firebase';
 import {
   collection,
   doc,
@@ -15,7 +15,7 @@ import {
   setDoc,
   deleteDoc,
   getDoc,
-} from 'firebase/firestore'
+} from 'firebase/firestore';
 
 //Javascript obj defining the styles for the modal component
 const style = {
@@ -31,7 +31,7 @@ const style = {
   display: 'flex',
   flexDirection: 'column',
   gap: 3,
-}
+};
 
 //React component that returns JSX
 export default function Home() {
@@ -62,13 +62,13 @@ export default function Home() {
       inventoryList.push({ name: doc.id, ...doc.data() }) //add to the inventoryList array
     })
     setInventory(inventoryList) //update the local state
-  }
+  };
 
   //The 'useEffect' hook ensures this run when the component mounts
   //React func to perform side effects in functional components
   useEffect(() => {
     updateInventory()
-  }, [])
+  }, []);
 
 
   //The following two functions are for adding and removing items into and from inventory
@@ -77,22 +77,22 @@ export default function Home() {
   //This function adds items into inventory
   const addItem = async (item) => {
     //creates a ref to the document in the inventory collection in Firestore
-    const docRef = doc(collection(firestore, 'inventory'), item)
+    const docRef = doc(collection(firestore, 'inventory'), item);
 
     //fetch the doc snapshot from the inventory collection in firestore
-    const docSnap = await getDoc(docRef)
+    const docSnap = await getDoc(docRef);
 
     //update quantity if document exists
     if (docSnap.exists()) {
-      const { quantity } = docSnap.data() // extract the 'quantity' field from the document data
-      await setDoc(docRef, { quantity: quantity + 1 }) //update the document by increasing the quantity by 1
+      const { quantity } = docSnap.data(); // extract the 'quantity' field from the document data
+      await setDoc(docRef, { quantity: quantity + 1 }); //update the document by increasing the quantity by 1
 
     } 
     else {
-      await setDoc(docRef, { quantity: 1 }) //set the quantity in the document ref to 1
+      await setDoc(docRef, { quantity: 1 }); //set the quantity in the document ref to 1
     }
 
-    await updateInventory() //refresh the inventory data
+    await updateInventory(); //refresh the inventory data
   }
 
 
@@ -100,7 +100,7 @@ export default function Home() {
   const removeItem = async (item) => {
 
     //create a ref to a doc in inventory collection in firestore
-    const docRef = doc(collection(firestore, 'inventory'), item)
+    const docRef = doc(collection(firestore, 'inventory'), item);
 
     //fetch the doc from the inventory collection in firestore
     const docSnap = await getDoc(docRef)
@@ -108,22 +108,22 @@ export default function Home() {
 
     if (docSnap.exists()) {// if the doc exists
 
-      const { quantity } = docSnap.data() //extract the 'quantity' field from the document data
+      const { quantity } = docSnap.data(); //extract the 'quantity' field from the document data
 
       if (quantity === 1) { //if there is only one quantity of that item in inventory collection, remove it
-        await deleteDoc(docRef)
+        await deleteDoc(docRef);
 
       } 
       else { 
-        await setDoc(docRef, { quantity: quantity - 1 }) //update the quantity by decrementing the quantity by 1
+        await setDoc(docRef, { quantity: quantity - 1 }); //update the quantity by decrementing the quantity by 1
       }
     }
-    await updateInventory() //refresh the inventory data
+    await updateInventory(); //refresh the inventory data
   }
 
   //Add modal control funcs
-  const handleOpen = () => setOpen(true) //indicate that the model should be displayed
-  const handleClose = () => setOpen(false) //indicate that the model should be hidden
+  const handleOpen = () => setOpen(true); //indicate that the model should be displayed
+  const handleClose = () => setOpen(false); //indicate that the model should be hidden
 
   return (
     <Box
