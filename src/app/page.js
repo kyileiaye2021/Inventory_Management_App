@@ -16,6 +16,7 @@ import {
   deleteDoc,
   getDoc,
 } from 'firebase/firestore';
+import CameraCapture from './CameraCapture';
 
 //Javascript obj defining the styles for the modal component
 const style = {
@@ -125,6 +126,15 @@ export default function Home() {
   const handleOpen = () => setOpen(true); //indicate that the model should be displayed
   const handleClose = () => setOpen(false); //indicate that the model should be hidden
 
+  //process the detected obj by adding each detected obj's class to the inventory
+  const handleCapture = (imageURL, detectedObjects) => {
+    console.log('handleCapture called with detectedObjects:', detectedObjects); // Log detected objects
+    detectedObjects.forEach((obj) => {
+      console.log('Adding item:', obj.class);
+      addItem(obj.class);
+    });
+  };
+
   return (
     <Box
       width="100vw"
@@ -170,6 +180,9 @@ export default function Home() {
       <Button variant="contained" onClick={handleOpen}>
         Add New Item
       </Button>
+
+      <CameraCapture onCapture={handleCapture} />   {/* Add the CameraCapture component */}
+
       <Box border={'1px solid #333'}>
         <Box
           width="800px"
