@@ -159,17 +159,23 @@ const CameraCapture = ({ onCapture }) =>{
         }
     };
 
+    const buttonStyle = {
+        fontSize: '18px',
+        padding: '15px 30px',
+        margin: '10px'
+    };
+    
     return(
         <div>
             {isCameraOn ? (
                 <div>
                     <video ref ={videoRef} width="640" height="480"/>
                     <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}/>
-                    <button onClick={capturePhoto}>Capture</button>
-                    <button onClick={stopCamera}>Stop Camera</button>
+                    <button style={buttonStyle} onClick={capturePhoto}>Capture</button>
+                    <button style={buttonStyle} onClick={stopCamera}>Stop Camera</button>
                 </div>
             ) : (
-                <button onClick={startCamera}>Start Camera</button>
+                <button style={buttonStyle} onClick={startCamera}>Start Camera</button>
             )}
         </div>
     )
